@@ -13,17 +13,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Factories", "Factories\Fact
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain", "Domain\Domain.csproj", "{3C5D93EF-2716-4A82-A57E-D6FB28A226E5}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Art", "Art", "{C5C1D6CD-603A-44FF-99C3-61C3C962B770}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Artwork", "Artwork", "{F0310D40-B312-4449-A737-89C41B8DCF3E}"
-	ProjectSection(SolutionItems) = preProject
-		ZekeDemo\ZekeDemoContent\Talonspraycyan.png = ZekeDemo\ZekeDemoContent\Talonspraycyan.png
-	EndProjectSection
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Music", "Music", "{6D0B7382-F53F-45BB-9EC5-A35C81A225AE}"
-EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Concepts", "Concepts", "{F3C776AF-1C79-4EF2-8553-6846BCB37B18}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -87,10 +76,5 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
-	EndGlobalSection
-	GlobalSection(NestedProjects) = preSolution
-		{F0310D40-B312-4449-A737-89C41B8DCF3E} = {F3C776AF-1C79-4EF2-8553-6846BCB37B18}
-		{6D0B7382-F53F-45BB-9EC5-A35C81A225AE} = {F3C776AF-1C79-4EF2-8553-6846BCB37B18}
-		{F3C776AF-1C79-4EF2-8553-6846BCB37B18} = {C5C1D6CD-603A-44FF-99C3-61C3C962B770}
 	EndGlobalSection
 EndGlobal
