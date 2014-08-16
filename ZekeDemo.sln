@@ -16,6 +16,9 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Art", "Art", "{C5C1D6CD-603A-44FF-99C3-61C3C962B770}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Artwork", "Artwork", "{F0310D40-B312-4449-A737-89C41B8DCF3E}"
+	ProjectSection(SolutionItems) = preProject
+		ZekeDemo\ZekeDemoContent\Talonspraycyan.png = ZekeDemo\ZekeDemoContent\Talonspraycyan.png
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Music", "Music", "{6D0B7382-F53F-45BB-9EC5-A35C81A225AE}"
 EndProject
