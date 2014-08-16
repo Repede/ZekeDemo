@@ -11,7 +11,7 @@ namespace Infrastructure.Living
 	public interface IMob
 	{
 		Texture2D Sprite { get; set; }
-		Vector2 Position { get; set; }
+		Rectangle Bounds { get; set; }
 		Single FoV { get; set; }
 		Single Speed { get; set; }
 		Single JumpStrength { get; set; }

@@ -8,6 +8,8 @@ using Microsoft.Xna.Framework.GamerServices;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
+using Infrastructure.Living;
+using Factories;
 
 namespace ZekeDemo
 {
@@ -18,6 +20,7 @@ namespace ZekeDemo
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+		List<IMob> mobs = new List<IMob>();
 
         public Zeke()
         {
@@ -46,6 +49,8 @@ namespace ZekeDemo
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+			MobFactory mobFactory = new MobFactory();
+			mobs.Add(mobFactory.CreatePlayer(this.Content.Load<Texture2D>("Talonspraycyan"), new Rectangle(0,0,20,20), 5, 5));
             // TODO: use this.Content to load your game content here
         }
 
@@ -81,10 +86,14 @@ namespace ZekeDemo
         protected override void Draw(GameTime gameTime)
         {
             GraphicsDevice.Clear(Color.CornflowerBlue);
-
+			spriteBatch.Begin();
             // TODO: Add your drawing code here
-
-            base.Draw(gameTime);
+			for (int i = 0; i < mobs.Count;++i)
+			{
+				spriteBatch.Draw(mobs[i].Sprite, mobs[i].Bounds, new Color(256, 256, 256));
+			}
+			spriteBatch.End();
+			base.Draw(gameTime);
         }
     }
 }
