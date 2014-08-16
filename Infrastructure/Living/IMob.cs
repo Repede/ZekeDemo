@@ -15,5 +15,7 @@ namespace Infrastructure.Living
 		Single FoV { get; set; }
 		Single Speed { get; set; }
 		Single JumpStrength { get; set; }
+
+		void Move(GameTime gameTime);
 	}
 }

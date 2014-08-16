@@ -7,14 +7,21 @@ using System.Threading.Tasks;
 using Domain.Living;
 using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Content;
 
 namespace Factories
 {
 	public class MobFactory
 	{
-		public IMob CreatePlayer(Texture2D image,Rectangle bounds, float speed, float jumpStrength)
+		private ContentManager _contentManager;
+
+		public MobFactory(ContentManager contentManager)
 		{
-			Player player = new Player(image, bounds, speed, jumpStrength);
+			_contentManager = contentManager;
+		}
+		public IMob CreatePlayer(string image,Rectangle bounds, float speed, float jumpStrength)
+		{
+			Player player = new Player(_contentManager.Load<Texture2D>(image), bounds, speed, jumpStrength);
 			return player;
 		}
 	}

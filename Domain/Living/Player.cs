@@ -1,6 +1,7 @@
 ﻿using Infrastructure.Living;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
+using Microsoft.Xna.Framework.Input;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -83,6 +84,11 @@ namespace Domain.Living
 			_bounds = bounds;
 			_speed = speed;
 			_jumpStrength = jumpStrength;
+		}
+
+		public void Move(GameTime gameTime)
+		{
+			Keyboard.GetState();
 		}
 	}
 }

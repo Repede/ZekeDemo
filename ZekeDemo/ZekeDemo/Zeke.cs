@@ -13,87 +13,120 @@ using Factories;
 
 namespace ZekeDemo
 {
-    /// <summary>
-    /// This is the main type for your game
-    /// </summary>
-    public class Zeke : Microsoft.Xna.Framework.Game
-    {
-        GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-		List<IMob> mobs = new List<IMob>();
+	/// <summary>
+	/// This is the main type for your game
+	/// </summary>
+	public class Zeke : Game
+	{
+		private GraphicsDeviceManager _graphics;
+		private SpriteBatch _spriteBatch;
+		private List<IMob> _mobs = new List<IMob>();
+		private float _ratio = (float)1280 / (float)720;
+		private Point _oldWindowSize;
 
-        public Zeke()
-        {
-            graphics = new GraphicsDeviceManager(this);
-            Content.RootDirectory = "Content";
-        }
+		public Zeke()
+		{
+			_graphics = new GraphicsDeviceManager(this);
+			Content.RootDirectory = "Content";
+			_graphics.PreferredBackBufferHeight = 720;
+			_graphics.PreferredBackBufferWidth = 1280;
+			this.Window.AllowUserResizing = true;
+			this.Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
+		}
 
-        /// <summary>
-        /// Allows the game to perform any initialization it needs to before starting to run.
-        /// This is where it can query for any required services and load any non-graphic
-        /// related content.  Calling base.Initialize will enumerate through any components
-        /// and initialize them as well.
-        /// </summary>
-        protected override void Initialize()
-        {
-            // TODO: Add your initialization logic here
+		private void Window_ClientSizeChanged(object sender, EventArgs e)
+		{
+			// Remove this event handler, so we don't call it when we change the window size in here
+			Window.ClientSizeChanged -= new EventHandler<EventArgs>(Window_ClientSizeChanged);
 
-            base.Initialize();
-        }
-
-        /// <summary>
-        /// LoadContent will be called once per game and is the place to load
-        /// all of your content.
-        /// </summary>
-        protected override void LoadContent()
-        {
-            // Create a new SpriteBatch, which can be used to draw textures.
-            spriteBatch = new SpriteBatch(GraphicsDevice);
-			MobFactory mobFactory = new MobFactory();
-			mobs.Add(mobFactory.CreatePlayer(this.Content.Load<Texture2D>("Talonspraycyan"), new Rectangle(0,0,20,20), 5, 5));
-            // TODO: use this.Content to load your game content here
-        }
-
-        /// <summary>
-        /// UnloadContent will be called once per game and is the place to unload
-        /// all content.
-        /// </summary>
-        protected override void UnloadContent()
-        {
-            // TODO: Unload any non ContentManager content here
-        }
-
-        /// <summary>
-        /// Allows the game to run logic such as updating the world,
-        /// checking for collisions, gathering input, and playing audio.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Update(GameTime gameTime)
-        {
-            // Allows the game to exit
-            if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
-                this.Exit();
-
-            // TODO: Add your update logic here
-
-            base.Update(gameTime);
-        }
-
-        /// <summary>
-        /// This is called when the game should draw itself.
-        /// </summary>
-        /// <param name="gameTime">Provides a snapshot of timing values.</param>
-        protected override void Draw(GameTime gameTime)
-        {
-            GraphicsDevice.Clear(Color.CornflowerBlue);
-			spriteBatch.Begin();
-            // TODO: Add your drawing code here
-			for (int i = 0; i < mobs.Count;++i)
-			{
-				spriteBatch.Draw(mobs[i].Sprite, mobs[i].Bounds, new Color(256, 256, 256));
+			if (Window.ClientBounds.Width != _oldWindowSize.X)
+			{ // We're changing the width
+				// Set the new backbuffer size
+				_graphics.PreferredBackBufferWidth = Window.ClientBounds.Width;
+				_graphics.PreferredBackBufferHeight = (int)(Window.ClientBounds.Width / _ratio);
 			}
-			spriteBatch.End();
+			else if (Window.ClientBounds.Height != _oldWindowSize.Y)
+			{ // we're changing the height
+				// Set the new backbuffer size
+				_graphics.PreferredBackBufferWidth = (int)(Window.ClientBounds.Height * _ratio);
+				_graphics.PreferredBackBufferHeight = Window.ClientBounds.Height;
+			}
+
+			_graphics.ApplyChanges();
+
+			// Update the old window size with what it is currently
+			_oldWindowSize = new Point(Window.ClientBounds.Width, Window.ClientBounds.Height);
+
+			// add this event handler back
+			Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
+		}
+
+		/// <summary>
+		/// Allows the game to perform any initialization it needs to before starting to run.
+		/// This is where it can query for any required services and load any non-graphic
+		/// related content.  Calling base.Initialize will enumerate through any components
+		/// and initialize them as well.
+		/// </summary>
+		protected override void Initialize()
+		{
+			// TODO: Add your initialization logic here
+
+			base.Initialize();
+		}
+
+		/// <summary>
+		/// LoadContent will be called once per game and is the place to load
+		/// all of your content.
+		/// </summary>
+		protected override void LoadContent()
+		{
+			// Create a new SpriteBatch, which can be used to draw textures.
+			_spriteBatch = new SpriteBatch(GraphicsDevice);
+			MobFactory mobFactory = new MobFactory(this.Content);
+			_mobs.Add(mobFactory.CreatePlayer("Concept/Artwork/flarecroped", new Rectangle(0, 0, 50, 50), 5, 5));
+			// TODO: use this.Content to load your game content here
+		}
+
+		/// <summary>
+		/// UnloadContent will be called once per game and is the place to unload
+		/// all content.
+		/// </summary>
+		protected override void UnloadContent()
+		{
+			// TODO: Unload any non ContentManager content here
+		}
+
+		/// <summary>
+		/// Allows the game to run logic such as updating the world,
+		/// checking for collisions, gathering input, and playing audio.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Update(GameTime gameTime)
+		{
+			// Allows the game to exit
+			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+				this.Exit();
+
+			// TODO: Add your update logic here
+
+			base.Update(gameTime);
+		}
+
+		/// <summary>
+		/// This is called when the game should draw itself.
+		/// </summary>
+		/// <param name="gameTime">Provides a snapshot of timing values.</param>
+		protected override void Draw(GameTime gameTime)
+		{
+			GraphicsDevice.Clear(Color.CornflowerBlue);
+			_spriteBatch.Begin();
+			// TODO: Add your drawing code here
+			for (int i = 0; i < _mobs.Count;++i)
+			{
+				_spriteBatch.Draw(_mobs[i].Sprite, _mobs[i].Bounds, new Color(256, 256, 256));
+			}
+			_spriteBatch.End();
 			base.Draw(gameTime);
-        }
-    }
+		}
+	}
 }
