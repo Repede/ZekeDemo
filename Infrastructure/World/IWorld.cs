@@ -7,8 +7,8 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.World
 {
-	interface IWorld
+	public interface IWorld
 	{
-		Vector4 Boundaries { get; set; }
+		Vector4 Boundaries { get; set; } //-x,+x,-y,+y
 	}
 }

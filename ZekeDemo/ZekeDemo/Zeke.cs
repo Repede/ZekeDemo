@@ -10,6 +10,7 @@ using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Media;
 using Infrastructure.Living;
 using Factories;
+using Infrastructure.World;
 
 namespace ZekeDemo
 {
@@ -23,6 +24,7 @@ namespace ZekeDemo
 		private List<IMob> _mobs = new List<IMob>();
 		private float _ratio = (float)1280 / (float)720;
 		private Point _oldWindowSize;
+		private IWorld _world;
 
 		public Zeke()
 		{
@@ -84,6 +86,8 @@ namespace ZekeDemo
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			MobFactory mobFactory = new MobFactory(this.Content);
 			_mobs.Add(mobFactory.CreatePlayer("Concept/Artwork/flarecroped", new Rectangle(0, 0, 50, 50), 5, 5));
+			WorldFactory worldFactory = new WorldFactory();
+			_world = worldFactory.CreateWorld();
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -105,9 +109,14 @@ namespace ZekeDemo
 		{
 			// Allows the game to exit
 			if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed)
+			{
 				this.Exit();
+			}
 
-			// TODO: Add your update logic here
+			for (int i = 0; i < _mobs.Count;++i)
+			{
+				_mobs[i].Move(gameTime, _world.Boundaries);
+			}
 
 			base.Update(gameTime);
 		}

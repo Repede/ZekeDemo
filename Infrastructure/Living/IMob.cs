@@ -12,10 +12,11 @@ namespace Infrastructure.Living
 	{
 		Texture2D Sprite { get; set; }
 		Rectangle Bounds { get; set; }
+		Vector2 Velocity { get; set; } // <LEFT/RIGHT, UP/DOWN>
 		Single FoV { get; set; }
 		Single Speed { get; set; }
 		Single JumpStrength { get; set; }
 
-		void Move(GameTime gameTime);
+		void Move(GameTime gameTime, Vector4 worldBoundaries);
 	}
 }
