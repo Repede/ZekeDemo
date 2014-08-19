@@ -1,5 +1,7 @@
 ﻿using Domain.World;
 using Infrastructure.World;
+using Microsoft.Xna.Framework.Content;
+using Microsoft.Xna.Framework.Graphics;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,9 +11,14 @@ namespace Factories
 {
 	public class WorldFactory
 	{
-		public IWorld CreateWorld()
+		private ContentManager _contentManager;
+		public WorldFactory(ContentManager contentManager)
 		{
-			FirstMap map = new FirstMap();
+			_contentManager = contentManager;
+		}
+		public IWorld CreateWorld(string image)
+		{
+			FirstMap map = new FirstMap(_contentManager.Load<Texture2D>(image));
 			return map;
 		}
 	}

@@ -33,7 +33,7 @@ namespace ZekeDemo
 			_graphics.PreferredBackBufferHeight = 720;
 			_graphics.PreferredBackBufferWidth = 1280;
 			this.Window.AllowUserResizing = true;
-			this.Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
+			//this.Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
 		}
 
 		private void Window_ClientSizeChanged(object sender, EventArgs e)
@@ -85,9 +85,9 @@ namespace ZekeDemo
 			// Create a new SpriteBatch, which can be used to draw textures.
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			MobFactory mobFactory = new MobFactory(this.Content);
-			_mobs.Add(mobFactory.CreatePlayer("Concept/Artwork/flarecroped", new Rectangle(0, 0, 50, 50), 5, 5));
-			WorldFactory worldFactory = new WorldFactory();
-			_world = worldFactory.CreateWorld();
+			_mobs.Add(mobFactory.CreatePlayer("Concept/Artwork/Character", new Rectangle(0, 0, 50, 50), 5, 5));
+			WorldFactory worldFactory = new WorldFactory(this.Content);
+			_world = worldFactory.CreateWorld("Concept/Artwork/Background");
 			// TODO: use this.Content to load your game content here
 		}
 
@@ -129,6 +129,7 @@ namespace ZekeDemo
 		{
 			GraphicsDevice.Clear(Color.CornflowerBlue);
 			_spriteBatch.Begin();
+			_spriteBatch.Draw(_world.Sprite, _world.Bounds, new Color(256, 256, 256));
 			// TODO: Add your drawing code here
 			for (int i = 0; i < _mobs.Count;++i)
 			{

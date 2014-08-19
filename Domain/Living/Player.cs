@@ -88,7 +88,7 @@ namespace Domain.Living
 		private bool _onGround;
 
 		private bool _keySpace = false;
-		private bool _keyDown = false;
+		//private bool _keyDown = false;
 		private bool _keyRight = false;
 		private bool _keyLeft = false;
 
@@ -97,7 +97,7 @@ namespace Domain.Living
 			_sprite = sprite;
 			_bounds = bounds;
 			_speed = 10;
-			_accel = (float)0.5;
+			_accel = (float)0.95;
 			_jumpStrength = 20;
 			_velocity = new Vector2(0, 0);
 			_onGround = true;
@@ -161,15 +161,15 @@ namespace Domain.Living
 				_velocity.X = 0;
 				_bounds.X = (int)Math.Round(worldBoundaries.X, MidpointRounding.AwayFromZero);
 			}
-			if (_bounds.X > worldBoundaries.Y)
+			if (_bounds.X+_bounds.Width > worldBoundaries.Y)
 			{
 				_velocity.X = 0;
-				_bounds.X = (int)Math.Round(worldBoundaries.Y, MidpointRounding.AwayFromZero);
+				_bounds.X = (int)Math.Round(worldBoundaries.Y, MidpointRounding.AwayFromZero) - _bounds.Width;
 			}
-			if (_bounds.Y > worldBoundaries.Z)
+			if (_bounds.Y + _bounds.Height > worldBoundaries.Z)
 			{
 				_velocity.Y = 0;
-				_bounds.Y = (int)Math.Round(worldBoundaries.Z, MidpointRounding.AwayFromZero);
+				_bounds.Y = (int)Math.Round(worldBoundaries.Z, MidpointRounding.AwayFromZero) - _bounds.Height;
 				_onGround = true;
 			}
 			if (_bounds.Y < worldBoundaries.W)
@@ -181,10 +181,10 @@ namespace Domain.Living
 
 		private void CalculateGravity()
 		{
-			_velocity.Y = _velocity.Y + (float)0.50;
-			if(_velocity.Y >= 10)
+			_velocity.Y = _velocity.Y + (float)1;
+			if(_velocity.Y >= 15)
 			{
-				_velocity.Y = 10;
+				_velocity.Y = 15;
 			}
 		}
 
