@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Domain.Living
 {
-	public class Player: IMob
+	public class Player : IMob
 	{
 
 		public Texture2D Sprite
@@ -24,6 +24,18 @@ namespace Domain.Living
 			}
 		}
 
+		public SpriteEffects SpriteEffects
+		{
+			get
+			{
+				return _spriteEffects;
+			}
+			set
+			{
+				_spriteEffects = value;
+			}
+		}
+
 		public Rectangle Bounds
 		{
 			get
@@ -33,6 +45,18 @@ namespace Domain.Living
 			set
 			{
 				_bounds = value;
+			}
+		}
+
+		public Rectangle SourceBounds
+		{
+			get
+			{
+				return _sourceBounds;
+			}
+			set
+			{
+				_sourceBounds = value;
 			}
 		}
 
@@ -78,8 +102,18 @@ namespace Domain.Living
 			}
 		}
 
+		private const int LEFT = 0;
+		private const int RIGHT = 1;
+
 		private Texture2D _sprite;
+		private SpriteEffects _spriteEffects;
 		private Rectangle _bounds;
+		private Rectangle _sourceBounds;
+		private int _widthFrames = 2;
+		private int _heightFrames = 3;
+		private int _curMovFrame = 0;
+		private int _shittyTimer = 0;
+		private int _lastDirection = LEFT;
 		private Vector2 _velocity;
 		private float _fov;
 		private float _speed;
@@ -96,27 +130,31 @@ namespace Domain.Living
 		{
 			_sprite = sprite;
 			_bounds = bounds;
+			_sourceBounds = new Rectangle(0, 0, sprite.Width / _widthFrames, sprite.Height / _heightFrames);
 			_speed = 10;
 			_accel = (float)0.95;
 			_jumpStrength = 20;
 			_velocity = new Vector2(0, 0);
 			_onGround = true;
+			_spriteEffects = SpriteEffects.None;
 		}
 
 		public void Move(GameTime gameTime, Vector4 worldBoundaries)
 		{
 			getKeys();
-			if(_keyLeft)
+			if (_keyLeft)
 			{
+				_lastDirection = LEFT;
 				_velocity.X -= _accel;
-				if(_velocity.X < -_speed)
+				if (_velocity.X < -_speed)
 				{
 					_velocity.X = -_speed;
 				}
 				Console.WriteLine(_velocity.X);
 			}
-			else if(_keyRight)
+			else if (_keyRight)
 			{
+				_lastDirection = RIGHT;
 				_velocity.X += _accel;
 				if (_velocity.X > _speed)
 				{
@@ -126,15 +164,15 @@ namespace Domain.Living
 			}
 			else
 			{
-				if(_velocity.X > 0)
+				if (_velocity.X > 0)
 				{
 					_velocity.X -= 1;
-					if(_velocity.X < 0)
+					if (_velocity.X < 0)
 					{
 						_velocity.X = 0;
 					}
 				}
-				else if(_velocity.X < 0)
+				else if (_velocity.X < 0)
 				{
 					_velocity.X += 1;
 					if (_velocity.X > 0)
@@ -143,8 +181,8 @@ namespace Domain.Living
 					}
 				}
 			}
-			
-			if(_keySpace)
+
+			if (_keySpace)
 			{
 				Jump();
 			}
@@ -152,6 +190,54 @@ namespace Domain.Living
 			_bounds.X = _bounds.X + (int)Math.Round(_velocity.X, MidpointRounding.AwayFromZero);
 			_bounds.Y = _bounds.Y + (int)Math.Round(_velocity.Y, MidpointRounding.AwayFromZero);
 			CheckBounds(worldBoundaries);
+			updateAnimation();
+		}
+
+		private void updateAnimation()
+		{
+			if (_lastDirection == LEFT)
+			{
+				_spriteEffects = SpriteEffects.FlipHorizontally;
+			}
+			else
+			{
+				_spriteEffects = SpriteEffects.None;
+			}
+
+			if (_velocity.Y < 0) //Going up
+			{
+				_sourceBounds = new Rectangle(_sourceBounds.Width * 0, _sourceBounds.Height * 1, _sourceBounds.Width, _sourceBounds.Height);
+			}
+			else if (_velocity.Y > 0) //Going down
+			{
+				_sourceBounds = new Rectangle(_sourceBounds.Width * 1, _sourceBounds.Height * 1, _sourceBounds.Width, _sourceBounds.Height);
+			}
+			else
+			{
+				if (_velocity.X > 0)
+				{
+					_sourceBounds = new Rectangle(_sourceBounds.Width * _curMovFrame, _sourceBounds.Height * 2, _sourceBounds.Width, _sourceBounds.Height);
+				}
+				else if (_velocity.X < 0)
+				{
+					_sourceBounds = new Rectangle(_sourceBounds.Width * _curMovFrame, _sourceBounds.Height * 2, _sourceBounds.Width, _sourceBounds.Height);
+				}
+				else if (_velocity.X == 0)
+				{
+					_sourceBounds = new Rectangle(0, 0, _sourceBounds.Width, _sourceBounds.Height);
+					_curMovFrame = 0;
+				}
+				_shittyTimer++;
+				if (_shittyTimer > 10)
+				{
+					_curMovFrame++;
+					if (_curMovFrame > 1)
+					{
+						_curMovFrame = 0;
+					}
+					_shittyTimer = 0;
+				}
+			}
 		}
 
 		private void CheckBounds(Vector4 worldBoundaries)
@@ -161,7 +247,7 @@ namespace Domain.Living
 				_velocity.X = 0;
 				_bounds.X = (int)Math.Round(worldBoundaries.X, MidpointRounding.AwayFromZero);
 			}
-			if (_bounds.X+_bounds.Width > worldBoundaries.Y)
+			if (_bounds.X + _bounds.Width > worldBoundaries.Y)
 			{
 				_velocity.X = 0;
 				_bounds.X = (int)Math.Round(worldBoundaries.Y, MidpointRounding.AwayFromZero) - _bounds.Width;
@@ -182,7 +268,7 @@ namespace Domain.Living
 		private void CalculateGravity()
 		{
 			_velocity.Y = _velocity.Y + (float)1;
-			if(_velocity.Y >= 15)
+			if (_velocity.Y >= 15)
 			{
 				_velocity.Y = 15;
 			}
@@ -219,7 +305,7 @@ namespace Domain.Living
 
 		private void Jump()
 		{
-			if(_velocity.Y == 0 && _onGround)
+			if (_velocity.Y == 0 && _onGround)
 			{
 				_velocity.Y = -_jumpStrength;
 				_onGround = false;

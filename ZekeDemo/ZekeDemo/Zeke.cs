@@ -113,7 +113,7 @@ namespace ZekeDemo
 				this.Exit();
 			}
 
-			for (int i = 0; i < _mobs.Count;++i)
+			for (int i = 0; i < _mobs.Count; ++i)
 			{
 				_mobs[i].Move(gameTime, _world.Boundaries);
 			}
@@ -131,9 +131,9 @@ namespace ZekeDemo
 			_spriteBatch.Begin();
 			_spriteBatch.Draw(_world.Sprite, _world.Bounds, new Color(256, 256, 256));
 			// TODO: Add your drawing code here
-			for (int i = 0; i < _mobs.Count;++i)
+			for (int i = 0; i < _mobs.Count; ++i)
 			{
-				_spriteBatch.Draw(_mobs[i].Sprite, _mobs[i].Bounds, new Color(256, 256, 256));
+				_spriteBatch.Draw(_mobs[i].Sprite, _mobs[i].Bounds, _mobs[i].SourceBounds, new Color(256, 256, 256), 0f, new Vector2(0, 0), _mobs[i].SpriteEffects, 0f);
 			}
 			_spriteBatch.End();
 			base.Draw(gameTime);
