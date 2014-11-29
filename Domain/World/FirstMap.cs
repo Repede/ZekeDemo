@@ -8,7 +8,7 @@ using System.Text;
 
 namespace Domain.World
 {
-	public class FirstMap: IWorld
+	public class FirstMap : IWorld
 	{
 		private Rectangle _bounds;
 		private Vector4 _boundaries;
@@ -16,7 +16,7 @@ namespace Domain.World
 		public Vector4 Boundaries
 		{
 			get { return _boundaries; }
-			set 
+			set
 			{
 				_boundaries = value;
 				_bounds = new Rectangle(0, 0, (int)Math.Round(_boundaries.Y - _boundaries.X), (int)Math.Round(_boundaries.Z - Boundaries.W));
@@ -37,7 +37,7 @@ namespace Domain.World
 
 		public FirstMap(Texture2D texture)
 		{
-			_boundaries = new Vector4(0, 1080, 670, 0);
+			_boundaries = new Vector4(0, 1080, 670, -75);
 			_bounds = new Rectangle(0, 0, (int)Math.Round(_boundaries.Y - _boundaries.X), (int)Math.Round(_boundaries.Z - Boundaries.W));
 			_sprite = texture;
 		}

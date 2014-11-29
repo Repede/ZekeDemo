@@ -267,7 +267,7 @@ namespace Domain.Living
 
 		private void CalculateGravity()
 		{
-			_velocity.Y = _velocity.Y + (float)1;
+			_velocity.Y = _velocity.Y + 1f;
 			if (_velocity.Y >= 15)
 			{
 				_velocity.Y = 15;
