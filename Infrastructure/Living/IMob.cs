@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.Living
 {
-	public interface IMob
+	public interface IMob : IDisposable
 	{
 		Texture2D Sprite { get; set; }
 		SpriteEffects SpriteEffects { get; set; }

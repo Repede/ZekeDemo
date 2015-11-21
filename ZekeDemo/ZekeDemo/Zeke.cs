@@ -20,6 +20,7 @@ namespace ZekeDemo
 	public class Zeke : Game
 	{
 		private GraphicsDeviceManager _graphics;
+		private RenderTarget2D _offScreenRenderTarget;
 		private SpriteBatch _spriteBatch;
 		private List<IMob> _mobs = new List<IMob>();
 		private float _ratio = (float)1280 / (float)720;
@@ -33,7 +34,8 @@ namespace ZekeDemo
 			_graphics.PreferredBackBufferHeight = 720;
 			_graphics.PreferredBackBufferWidth = 1280;
 			this.Window.AllowUserResizing = true;
-			//this.Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
+			this.IsMouseVisible = true;
+			this.Window.ClientSizeChanged += new EventHandler<EventArgs>(Window_ClientSizeChanged);
 		}
 
 		private void Window_ClientSizeChanged(object sender, EventArgs e)
@@ -82,6 +84,11 @@ namespace ZekeDemo
 		/// </summary>
 		protected override void LoadContent()
 		{
+			// Set up initial values
+			_ratio = GraphicsDevice.Viewport.AspectRatio;
+			_oldWindowSize = new Point(Window.ClientBounds.Width, Window.ClientBounds.Height);
+			_offScreenRenderTarget = new RenderTarget2D(GraphicsDevice, Window.ClientBounds.Width, Window.ClientBounds.Height);
+
 			// Create a new SpriteBatch, which can be used to draw textures.
 			_spriteBatch = new SpriteBatch(GraphicsDevice);
 			MobFactory mobFactory = new MobFactory(this.Content);
@@ -98,6 +105,23 @@ namespace ZekeDemo
 		protected override void UnloadContent()
 		{
 			// TODO: Unload any non ContentManager content here
+			if (_mobs != null)
+			{
+				foreach (IMob mob in _mobs)
+				{
+					mob.Dispose();
+				}
+			}
+
+			if (_world != null)
+			{
+				_world.Dispose();
+			}
+
+			if (_spriteBatch != null)
+			{
+				_spriteBatch.Dispose();
+			}
 		}
 
 		/// <summary>
@@ -137,6 +161,21 @@ namespace ZekeDemo
 			}
 			_spriteBatch.End();
 			base.Draw(gameTime);
+		}
+
+		protected override bool BeginDraw()
+		{
+			GraphicsDevice.SetRenderTarget(_offScreenRenderTarget);
+			return base.BeginDraw();
+		}
+
+		protected override void EndDraw()
+		{
+			GraphicsDevice.SetRenderTarget(null);
+			_spriteBatch.Begin();
+			_spriteBatch.Draw(_offScreenRenderTarget, GraphicsDevice.Viewport.Bounds, Color.White);
+			_spriteBatch.End();
+			base.EndDraw();
 		}
 	}
 }

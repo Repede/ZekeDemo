@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Infrastructure.World
 {
-	public interface IWorld
+	public interface IWorld : IDisposable
 	{
 		Texture2D Sprite { get; set; }
 		Vector4 Boundaries { get; set; } //-x,+x,-y,+y

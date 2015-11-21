@@ -41,5 +41,10 @@ namespace Domain.World
 			_bounds = new Rectangle(0, 0, (int)Math.Round(_boundaries.Y - _boundaries.X), (int)Math.Round(_boundaries.Z - Boundaries.W));
 			_sprite = texture;
 		}
+
+		public void Dispose()
+		{
+			_sprite.Dispose();
+		}
 	}
 }

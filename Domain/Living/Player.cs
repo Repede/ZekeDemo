@@ -139,6 +139,11 @@ namespace Domain.Living
 			_spriteEffects = SpriteEffects.None;
 		}
 
+		public void Dispose()
+		{
+			_sprite.Dispose();
+		}
+
 		public void Move(GameTime gameTime, Vector4 worldBoundaries)
 		{
 			getKeys();
